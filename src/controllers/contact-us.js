@@ -1,12 +1,10 @@
 const contactUsModel = require("../models/contact-us");
+const response = require('../helpers/standardResponse')
 
 exports.getDataContact = async (req, res) => {
-  const contactUs = await contactUsModel.getDataContact();
-  return res.json({
-    success: true,
-    message: "List contact",
-    results: contactUs
-  });
+  const results = await contactUsModel.getDataContact(req);
+
+  return response(res, "List contact", results.contact, results.pageInfo);
 };
 
 exports.post = async (req, res) => {
