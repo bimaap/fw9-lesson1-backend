@@ -2,12 +2,31 @@ const prisma = require("../helpers/prisma");
 
 exports.getDataContact = async (data) => {
   const page = parseInt(data.query.page) || 1;
-  const limit = parseInt(data.query.limit) || 5;
+  const limit = parseInt(data.query.limit) || 8;
   const search = data.query.search || '';
   const sort = data.query.sort || 'asc';// asc || desc
-  const filter = data.query.filter || 'email';
+  const filter = data.query.filter || 'name';
+  const where = filter === 'name' ? {
+    AND: [
+    { 
+      first_name: { 
+        contains: search.split(' ')[0], 
+        mode: "insensitive" 
+      } 
+    },
+    { 
+      last_name: { 
+        contains: search.split(' ')[1], 
+        mode: "insensitive" 
+      } 
+    },
+  ]}:{
+    [filter]: { 
+      contains: search, 
+      mode: "insensitive" 
+    }
+  }
 
-  console.log(filter);
   const count = await prisma.contact_us.findMany(search && {
     where: {
       email: { contains: search }
@@ -17,11 +36,9 @@ exports.getDataContact = async (data) => {
   const contact = await prisma.contact_us.findMany({
     skip: (page - 1) * limit,
     take: limit,
-    where: {
-      email: { contains: search }
-    },
+    where,
     orderBy: {
-      [filter]: sort,
+      id: sort,
     },
   });
 
