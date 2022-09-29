@@ -59,3 +59,13 @@ exports.create = async (data) => {
   });
   return contact;
 };
+
+exports.getContactById = async (data) => {
+  const id = parseInt(data.params.id)
+  const contact = await prisma.contact_us.findUnique({
+    where:{
+      id: id
+    }
+  });
+  return contact;
+}

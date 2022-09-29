@@ -15,3 +15,13 @@ exports.post = async (req, res) => {
     results: contactUs
   });
 };
+
+exports.getContactById = async (req, res) => {
+  const result = await contactUsModel.getContactById(req);
+
+  return res.json({
+    success: true,
+    message: "Data contact",
+    results: result
+  });
+};
