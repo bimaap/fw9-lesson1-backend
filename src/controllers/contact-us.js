@@ -16,6 +16,24 @@ exports.post = async (req, res) => {
   });
 };
 
+exports.patch = async (req, res) => {
+  const contactUs = await contactUsModel.patch(req);
+  return res.json({
+    success: true,
+    message: "Update contact success",
+    results: contactUs
+  });
+};
+
+exports.delete = async (req, res) => {
+  const contactUs = await contactUsModel.delete(req);
+  return res.json({
+    success: true,
+    message: "Delete contact success",
+    results: contactUs
+  });
+};
+
 exports.getContactById = async (req, res) => {
   const result = await contactUsModel.getContactById(req);
 

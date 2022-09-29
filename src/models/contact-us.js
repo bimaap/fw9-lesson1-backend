@@ -7,18 +7,34 @@ exports.getDataContact = async (data) => {
   const sort = data.query.sort || 'asc';// asc || desc
   const filter = data.query.filter || 'name';
   const where = filter === 'name' ? {
-    AND: [
+    OR: [
     { 
-      first_name: { 
-        contains: search.split(' ')[0], 
-        mode: "insensitive" 
-      } 
+      AND: [
+        {
+          first_name: { 
+            contains: search.split(' ')[0], 
+            mode: "insensitive" 
+          },
+          last_name: { 
+            contains: search.split(' ')[1], 
+            mode: "insensitive" 
+          }
+        }
+      ]
     },
     { 
-      last_name: { 
-        contains: search.split(' ')[1], 
-        mode: "insensitive" 
-      } 
+      AND: [
+        {
+          first_name: { 
+            contains: search.split(' ')[1], 
+            mode: "insensitive" 
+          },
+          last_name: { 
+            contains: search.split(' ')[0], 
+            mode: "insensitive" 
+          }
+        }
+      ]
     },
   ]}:{
     [filter]: { 
@@ -57,6 +73,27 @@ exports.create = async (data) => {
   const contact = await prisma.contact_us.create({
     data
   });
+  return contact;
+};
+
+exports.patch = async (data) => {
+  const id = parseInt(data.params.id)
+  const contact = await prisma.contact_us.update({
+    where: {
+      id: id
+    },
+    data: data.body,
+  })
+  return contact;
+};
+
+exports.delete = async (data) => {
+  const id = parseInt(data.params.id)
+  const contact = await prisma.contact_us.delete({
+    where: {
+      id: id,
+    },
+  })
   return contact;
 };
 
