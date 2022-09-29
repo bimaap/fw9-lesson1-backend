@@ -6,7 +6,7 @@ const port = process.env.PORT || 8000;
 
 app.use(cors())
 app.unsubscribe(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
 
 app.use('/',require('./src/routes/'));
 
